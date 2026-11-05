@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# MLflow local tracking / artifacts
+mlruns/
+mlartifacts/
+mlflow.db
+
+# Trained model artifacts (the .gitkeep placeholder stays)
+models/*.pkl
+!models/.gitkeep
+
+# Reports
+reports/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+*.tfplan
+terraform.tfvars
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
