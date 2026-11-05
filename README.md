@@ -54,10 +54,12 @@ flowchart LR
 ├── app/main.py             # FastAPI serving app (health / predict / metrics)
 ├── scripts/                # CLI entry points
 │   ├── run_training.py
-│   └── check_drift.py      # exits 1 + DRIFT_DETECTED when drift is flagged
+│   ├── check_drift.py      # exits 1 + DRIFT_DETECTED when drift is flagged
+│   └── demo.sh             # one-command end-to-end demo (see Demo section)
 ├── dags/ml_pipeline_dag.py # Airflow DAG: prepare → train → evaluate → drift → retrain
 ├── infra/terraform/        # AWS: S3, ECR, ECS Fargate + ALB, IAM, CloudWatch
 ├── tests/                  # pytest: training, drift, API
+├── docs/demo.md            # demo walkthrough with captured real output
 ├── docker-compose.yml      # local stack: MLflow + API + Airflow + Postgres
 ├── Dockerfile              # API image
 └── requirements.txt        # core deps (Airflow via Docker; see requirements-airflow.txt)
@@ -95,6 +97,31 @@ docker compose up --build
 - API → http://localhost:8000/docs
 - MLflow UI → http://localhost:5000
 - Airflow UI → http://localhost:8080 (admin / admin), DAG `ml_pipeline`
+
+## Demo
+
+One command runs the whole story end to end — train, drift check on clean
+data, drift check on shifted data, then serve the API and call it:
+
+```bash
+bash scripts/demo.sh
+```
+
+Captured output from a real run:
+
+```text
+run_id=b8608b6ef42b42738b48b4a0b4847e3b
+accuracy=1.0000 f1_weighted=1.0000
+...
+NO_DRIFT                                     # clean batch, exit 0
+DRIFT_DETECTED flagged_features=['alcohol', 'malic_acid', 'ash',
+'alcalinity_of_ash', 'magnesium', 'total_phenols']   # shifted batch, exit 1
+...
+{"status":"ok","model_loaded":true,"model_path":"models/model.pkl"}
+{"prediction":0,"class_name":"class_0"}
+```
+
+Full walkthrough with the complete outputs: **[docs/demo.md](docs/demo.md)**.
 
 ## How drift-triggered retraining works
 
