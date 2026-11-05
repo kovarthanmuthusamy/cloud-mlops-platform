@@ -1,0 +1,4 @@
+# Airflow is deployed via the official apache/airflow Docker image in
+# docker-compose; this file is only needed to run Airflow locally outside
+# Docker. Kept separate so the core/test environment stays light.
+apache-airflow>=2.10,<3.0
