@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    name: Lint and test (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint
+        run: ruff check src app scripts tests dags
+
+      - name: Test
+        run: pytest -q
+
+  terraform:
+    name: Terraform fmt and validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.x"
+
+      - name: Format check
+        run: terraform fmt -check -recursive
+
+      - name: Validate
+        run: |
+          terraform init -backend=false
+          terraform validate
+
+  docker:
+    name: Build API image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Train a model so the image has an artifact to serve
+        run: |
+          pip install -r requirements.txt
+          PYTHONPATH=src python scripts/run_training.py
+
+      - name: Build image
+        run: docker build -t cloud-mlops-platform-api .
