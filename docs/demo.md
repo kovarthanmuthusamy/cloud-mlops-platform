@@ -1,4 +1,9 @@
 # Demo
+![Terminal demo — train, drift check, API serving](demo.gif)
+
+*35-second terminal recording with real output from a local run — also
+available as [demo.mp4](demo.mp4). Regenerate it with
+`python3 docs/make_demo_video.py` (see the file header).*
 
 A two-minute, end-to-end walkthrough of the platform. Run it yourself with
 one command from the repository root:
