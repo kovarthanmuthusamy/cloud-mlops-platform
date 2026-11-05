@@ -99,6 +99,9 @@ docker compose up --build
 - Airflow UI → http://localhost:8080 (admin / admin), DAG `ml_pipeline`
 
 ## Demo
+![End-to-end demo: train, drift detection, API serving](docs/demo.gif)
+
+*35-second terminal demo with real output from a local run. Prefer video? [Watch the MP4 version](docs/demo.mp4).*
 
 One command runs the whole story end to end — train, drift check on clean
 data, drift check on shifted data, then serve the API and call it:
