@@ -1,3 +1,5 @@
+![cover](cover.png)
+
 # cloud-mlops-platform
 
 An end-to-end MLOps platform: a model is trained and tracked with **MLflow**,
